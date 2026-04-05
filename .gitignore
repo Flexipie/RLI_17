@@ -1,0 +1,10 @@
+# Replay buffer dumps — large, not needed for evaluation
+models_*/memory_*.npy
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# OS
+.DS_Store

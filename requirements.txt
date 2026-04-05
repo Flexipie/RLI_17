@@ -1,0 +1,6 @@
+# Pyrace RL (Q-table + DQN) — install: pip install -r requirements.txt
+gymnasium>=0.29.0
+numpy>=1.23.0
+matplotlib>=3.6.0
+pygame>=2.1.0
+torch>=2.0.0
