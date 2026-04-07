@@ -63,6 +63,10 @@ SURVIVAL_REWARD    = 0.0   # env already gives speed reward, so no extra surviva
 N_ENVS             = 4
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+if device.type == "cuda":
+    print(f"Using GPU: {torch.cuda.get_device_name(0)}")
+else:
+    print("Using CPU")
 
 env         = None
 policy_net  = None
@@ -346,7 +350,11 @@ if __name__ == "__main__":
     replay_buffer = ReplayBuffer(REPLAY_CAPACITY)
 
     # -------------
-    load_and_play(3500, learning=False) # It later epochs it either fails on one of the later turns (or forgets catastrophically)
-    # load_checkpoint(1500); simulate_parallel(init_env_steps=27_000)  # resume training
-    # simulate_parallel()                                               # train from scratch
+    WATCH = True   # True = load checkpoint and watch; False = train
+
+    if WATCH:
+        load_and_play(2000, learning=False)
+    else:
+        simulate_parallel()                                               # train from scratch
+        # load_checkpoint(1500); simulate_parallel(init_env_steps=27_000)  # resume training
     # -------------

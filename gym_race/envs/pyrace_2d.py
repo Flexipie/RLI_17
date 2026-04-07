@@ -377,7 +377,7 @@ class PyRace2DV3(PyRace2D):
         if self.car.goal:
             return 10000
         # per-step speed reward makes the signal dense so the agent doesn't have to wait for crashes/goals
-        reward = self.car.speed * 0.5
+        reward = self.car.speed * 2.0
         if self.car.check_flag:
             self.car.check_flag = False
             reward += 500  # bonus for each checkpoint passed
