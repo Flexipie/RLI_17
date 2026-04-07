@@ -21,6 +21,8 @@ The main issue is that the model learned that going slower is the safe option.
 It completes laps but does not utilise speed to its fullest potential.
 A fix to this problem could be to increase the importance of speed in the reward function.
 
+Update after increasing the influence of speed in the reward function: model is now willing to go faster and took less time to complete laps consistently.
+
 """
 from __future__ import annotations
 
