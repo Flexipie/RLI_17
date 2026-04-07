@@ -341,3 +341,44 @@ class PyRace2D:
 
 def get_distance(p1, p2):
 	return math.sqrt(math.pow((p1[0] - p2[0]), 2) + math.pow((p1[1] - p2[1]), 2))
+
+
+class PyRace2DV3(PyRace2D):
+    """Improved environment used by Pyrace-v3.
+
+    Changes vs PyRace2D:
+      - BRAKE action (action=3): reduces speed by 2 (clamped to car minimum)
+      - observe() returns raw float pixel distances (0–200) instead of bucketed ints 0–10
+      - evaluate() adds a per-step speed reward and a checkpoint bonus for denser signal
+    """
+
+    def action(self, action):
+        if action == 0:   self.car.speed += 2
+        elif action == 1: self.car.angle += 5
+        elif action == 2: self.car.angle -= 5
+        elif action == 3: self.car.speed = max(1, self.car.speed - 2)  # brake
+        self.car.update()
+        self.car.check_collision()
+        self.car.check_checkpoint()
+        self.car.radars.clear()
+        for d in range(-90, 120, 45):
+            self.car.check_radar(d)
+
+    def observe(self):
+        # continuous pixel distances (0–200) — more informative than the 0–10 bucketed version
+        ret = [0.0, 0.0, 0.0, 0.0, 0.0]
+        for i, r in enumerate(self.car.radars):
+            ret[i] = float(r[1])
+        return ret
+
+    def evaluate(self):
+        if not self.car.is_alive:
+            return -10000 + self.car.distance
+        if self.car.goal:
+            return 10000
+        # per-step speed reward makes the signal dense so the agent doesn't have to wait for crashes/goals
+        reward = self.car.speed * 0.5
+        if self.car.check_flag:
+            self.car.check_flag = False
+            reward += 500  # bonus for each checkpoint passed
+        return reward

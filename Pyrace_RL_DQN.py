@@ -46,7 +46,7 @@ REPORT_EPISODES = 500
 DISPLAY_EPISODES = 100
 
 REPLAY_CAPACITY = 100_000
-BATCH_SIZE = 128
+BATCH_SIZE = 256
 # Most env steps have reward 0; only crash/goal are huge — start training once buffer has one batch.
 WARMUP_STEPS = 512
 TRAIN_UPDATES_PER_STEP = 1  # 1 gradient update per env step (standard ratio; was 4)
@@ -441,7 +441,7 @@ if __name__ == "__main__":
     replay_buffer = ReplayBuffer(REPLAY_CAPACITY)
 
     # -------------
-    load_and_play(2500, learning=False)
+    load_and_play(3500, learning=False)
     # load_checkpoint(1500); simulate_parallel(init_env_steps=27_000)  # resume training
     # simulate_parallel()          # train from scratch
     # -------------
